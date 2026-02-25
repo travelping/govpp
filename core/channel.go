@@ -486,3 +486,10 @@ func (p *idPool) Put(id uint16) {
 	p.ids = append(p.ids, id)
 	p.lock.Unlock()
 }
+
+// GetAvailableCount returns the number of available IDs in the pool
+func (p *idPool) GetAvailableCount() int {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+	return len(p.ids)
+}

@@ -587,3 +587,15 @@ func (c *Connection) sendConnEvent(event ConnectionEvent) {
 		c.logger.Warn("Connection state channel is full, discarding value.")
 	}
 }
+
+// GetChannelIDStats returns statistics about channel ID pool usage
+// Returns: activeChannels (len(channels)), availableIDs (len(idPool.ids))
+func (c *Connection) GetChannelIDStats() (activeChannels int, availableIDs int) {
+	c.channelsLock.RLock()
+	activeChannels = len(c.channels)
+	c.channelsLock.RUnlock()
+
+	availableIDs = c.channelIdPool.GetAvailableCount()
+
+	return activeChannels, availableIDs
+}
